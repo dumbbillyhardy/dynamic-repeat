@@ -18,6 +18,7 @@
             },
 
             _generateColumns() {
+              if(this.columns != null) {
                 this._renderers = this.columns.map(c => {
                     const currTemplate = this._getTemplate(c);
                     if(this._lastTemplate !== currTemplate) {
@@ -29,22 +30,10 @@
                     Polymer.dom(this.parentNode).insertBefore(renderer.root, this);
                     return renderer;
                 });
+              }
             },
 
             ready() {
-                this.columns = [{
-                    prop: "email",
-                    type: "string",
-                }, {
-                    prop: "gender",
-                    type: "string",
-                }, {
-                    prop: "password",
-                    type: "encrypted",
-                }, {
-                    prop: "phone",
-                    type: "number",
-                }];
                 this._generateColumns();
             }
         });
