@@ -11,17 +11,37 @@
 
             behaviors: [Polymer.Templatizer],
 
+            _getTemplate(column) {
+                let template = this.queryEffectiveChildren("template[for="+column.prop+"]");
+                template = template || this.queryEffectiveChildren("template[for="+column.type+"]");
+                template = template || this.queryEffectiveChildren("template:not([for])");
+                return template;
+            },
+
             _generateColumns() {
-                this.columns.forEach(c => {
+                this._renderers = this.columns.map(c => {
+                    this.templatize(this._getTemplate(c));
                     let renderer = this.stamp(null);
-                    renderer.column = c;
+                    renderer.definition = c;
                     Polymer.dom(this.parentNode).insertBefore(renderer.root, this);
+                    return renderer;
                 });
             },
 
             ready() {
-                this.templatize(this.queryEffectiveChildren("template"));
-                this.columns = ["email", "gender"];
+                this.columns = [{
+                    prop: "email",
+                    type: "string",
+                }, {
+                    prop: "gender",
+                    type: "string",
+                }, {
+                    prop: "password",
+                    type: "encrypted",
+                }, {
+                    prop: "phone",
+                    type: "number",
+                }];
                 this._generateColumns();
             }
         });
