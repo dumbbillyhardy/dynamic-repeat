@@ -3,12 +3,7 @@
 <link rel="import" href="../vaadin-grid/vaadin-grid-column.html">
 <dom-module id="x-col-def">
     <template>
-        <template id="template">
-            <vaadin-grid-column>
-                <template class="header">[[column]]</template>
-                <template>[[get(column, item)]]</template>
-            </vaadin-grid-column>
-        </template>
+        <slot></slot>
     </template>
     <script>
         Polymer({
@@ -25,7 +20,7 @@
             },
 
             ready() {
-                this.templatize(this.$.template);
+                this.templatize(this.queryEffectiveChildren("template"));
                 this.columns = ["email", "gender"];
                 this._generateColumns();
             }

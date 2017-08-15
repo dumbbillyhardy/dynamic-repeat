@@ -21,7 +21,14 @@
         <template>
             <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
             <vaadin-grid aria-label="Dynamic Columns Example" id="grid" data-provider="[[dataProvider]]" size="200">
-                <x-col-def columns="[[columns]]"></x-col-def>
+                <x-col-def columns="[[columns]]">
+                    <template>
+                        <vaadin-grid-column>
+                            <template class="header">[[column]]</template>
+                            <template>[[get(column, item)]]</template>
+                        </vaadin-grid-column>
+                    </template>
+                </x-col-def>
             </vaadin-grid>
         </template>
     </dom-bind>
