@@ -13,5 +13,9 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "devDependencies": {
+    "vaadin-grid": "^3.0.1",
+    "iron-data-table": "Saulis/iron-data-table#^1.0.7"
+  }
 }
