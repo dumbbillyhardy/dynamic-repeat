@@ -22,7 +22,7 @@
         <template>
             <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
             <vaadin-grid aria-label="Dynamic Columns Example" id="grid" data-provider="[[dataProvider]]" size="200">
-                <x-col-def id=xColDef columns="[[columns]]">
+                <x-col-def id="xColDef" columns="[[columns]]">
                     <template for="string">
                         <vaadin-grid-column>
                             <template class="header"><b>[[definition.prop]]</b></template>
@@ -53,21 +53,20 @@
     </dom-bind>
 </body>
 <script>
-  var columns = [{
-      prop: "email",
-      type: "string",
-  }, {
-      prop: "gender",
-      type: "string",
-  }, {
-      prop: "password",
-      type: "encrypted",
-  }, {
-      prop: "phone",
-      type: "number",
-  }];
-  document.querySelector("#xColDef").setAttribute("columns", columns);
-  document.querySelector("#xColDef")._generateColumns();
+    let xColDef = document.querySelector("#xColDef");
+    xColDef.columns = [{
+        prop: "email",
+        type: "string",
+    }, {
+        prop: "gender",
+        type: "string",
+    }, {
+        prop: "password",
+        type: "encrypted",
+    }, {
+        prop: "phone",
+        type: "number",
+    }];
 </script>
 
 </html>
