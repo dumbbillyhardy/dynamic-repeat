@@ -9,6 +9,13 @@
 
             behaviors: [Polymer.Templatizer],
 
+            properties: {
+                columns: {
+                    type: Array,
+                    observer: "_generateColumns"
+                }
+            },
+
             _getTemplate(column) {
                 let template = this.queryEffectiveChildren("template[for="+column.prop+"]");
                 template = template || this.queryEffectiveChildren("template[for="+column.type+"]");
@@ -31,10 +38,6 @@
                 });
               }
             },
-
-            ready() {
-                this._generateColumns();
-            }
         });
     </script>
 </dom-module>
