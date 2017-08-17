@@ -33,7 +33,7 @@
                     }
                     let renderer = this.stamp(null);
                     renderer.definition = c;
-                    Polymer.dom(this.parentNode).insertBefore(renderer.root, this);
+                    Polymer.dom(Polymer.dom(this).parentNode).insertBefore(renderer.root, this);
                     return renderer;
                 });
               }

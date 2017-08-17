@@ -19,6 +19,6 @@
     "iron-data-table": "Saulis/iron-data-table#^1.0.7"
   },
   "dependencies": {
-    "polymer": "2"
+    "polymer": "1.9 - 2"
   }
 }

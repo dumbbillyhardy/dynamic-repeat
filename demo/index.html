@@ -19,7 +19,7 @@
 
 <body unresolved>
     <dom-bind id="domBind">
-        <template>
+        <template is="dom-bind" id="domBindPoly1">
             <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
             <vaadin-grid aria-label="Dynamic Columns Example" id="grid" data-provider="[[dataProvider]]" size="200">
                 <dynamic-repeat items="[[columns]]">
@@ -54,7 +54,8 @@
 </body>
 <script>
     let domBind = document.querySelector("#domBind");
-    domBind.columns = [{
+init = function() {
+    this.columns = [{
         prop: "email",
         type: "string",
     }, {
@@ -67,6 +68,14 @@
         prop: "phone",
         type: "number",
     }];
+}
+if(domBind) {
+    //polymer 2
+    init.bind(domBind)();
+}
+let domBindPoly1 = document.querySelector("#domBindPoly1");
+//polymer 1
+domBindPoly1.addEventListener("dom-change", init.bind(domBindPoly1));
 </script>
 
 </html>
