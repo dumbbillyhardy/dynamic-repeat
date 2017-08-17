@@ -1,18 +1,18 @@
 <link rel="import" href="../polymer/polymer.html">
-<dom-module id="x-col-def">
+<dom-module id="dynamic-repeat">
     <template>
         <slot></slot>
     </template>
     <script>
         Polymer({
-            is: 'x-col-def',
+            is: 'dynamic-repeat',
 
             behaviors: [Polymer.Templatizer],
 
             properties: {
-                columns: {
+                items: {
                     type: Array,
-                    observer: "_generateColumns"
+                    observer: "_generate"
                 }
             },
 
@@ -23,9 +23,9 @@
                 return template;
             },
 
-            _generateColumns() {
-              if(this.columns != null) {
-                this._renderers = this.columns.map(c => {
+            _generate() {
+              if(this.items != null) {
+                this._renderers = this.items.map(c => {
                     const currTemplate = this._getTemplate(c);
                     if(this._lastTemplate !== currTemplate) {
                         this._lastTemplate = currTemplate;

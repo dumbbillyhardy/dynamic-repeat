@@ -1,5 +1,5 @@
 {
-  "name": "dynamic-columns",
+  "name": "dynamic-repeat",
   "authors": [
     "Billy Hardy <billy92@gmail.com>"
   ],
@@ -17,5 +17,8 @@
   "devDependencies": {
     "vaadin-grid": "^3.0.1",
     "iron-data-table": "Saulis/iron-data-table#^1.0.7"
+  },
+  "dependencies": {
+    "polymer": "2"
   }
 }

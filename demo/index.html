@@ -11,18 +11,18 @@
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
   <link rel="import" href="../../vaadin-grid/vaadin-grid-column-group.html">
-  <link rel="import" href="../x-col-def.html">
+  <link rel="import" href="../dynamic-repeat.html">
   <link rel="import" href="../../vaadin-grid/vaadin-grid.html">
   <link rel="import" href="../../vaadin-grid/vaadin-grid-column.html">
   <link rel="import" href="../../vaadin-grid/demo/x-data-provider.html">
 </head>
 
 <body unresolved>
-    <dom-bind>
+    <dom-bind id="domBind">
         <template>
             <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
             <vaadin-grid aria-label="Dynamic Columns Example" id="grid" data-provider="[[dataProvider]]" size="200">
-                <x-col-def id="xColDef" columns="[[columns]]">
+                <dynamic-repeat items="[[columns]]">
                     <template for="string">
                         <vaadin-grid-column>
                             <template class="header"><b>[[definition.prop]]</b></template>
@@ -47,14 +47,14 @@
                             <template>[[get(definition.prop, item)]]</template>
                         </vaadin-grid-column>
                     </template>
-                </x-col-def>
+                </dynamic-repeat>
             </vaadin-grid>
         </template>
     </dom-bind>
 </body>
 <script>
-    let xColDef = document.querySelector("#xColDef");
-    xColDef.columns = [{
+    let domBind = document.querySelector("#domBind");
+    domBind.columns = [{
         prop: "email",
         type: "string",
     }, {
