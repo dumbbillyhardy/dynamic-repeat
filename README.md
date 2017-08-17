@@ -1,3 +1,6 @@
+[![Published on
+webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/billy-hardy/dynamic-repeat)
+
 You can use **dynamic-repeat** exactly the same way you'd use **dom-repeat**,
     but with several differences. You can pass multiple templates into **dynamic-repeat**
     and, based on the precedence, the correct template will be chosen to render each item.
