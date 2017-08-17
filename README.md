@@ -4,3 +4,43 @@ You can use **dynamic-repeat** exactly the same way you'd use **dom-repeat**,
     The `items` array should be an array of objects containing the properties `prop` and `type`.
     If a template is found for `prop`, that is used. It then checks `type`, and finally checks
     for a default template. Mark templates with the `for` attribute.
+
+<!---
+```
+<custom-element-demo>
+<template>
+<link rel="import" href="dynamic-repeat.html">
+<next-code-block></next-code-block>
+</template>
+</custom-element-demo>
+```
+-->
+```html
+<script>
+window.onload = () => {
+    dynamicRepeat.items = [{
+value: "test@test.com",
+       prop: "email",
+       type: "string",
+    }, {
+value: "Female",
+           prop: "gender",
+           type: "string",
+    }, {
+value: "!QAZ2wsx#EDC4rfv",
+           prop: "password",
+           type: "encrypted",
+    }, {
+value: "29",
+           prop: "age",
+           type: "number",
+    }];
+};
+</script>
+
+<dynamic-repeat id="dynamicRepeat">
+    <template for="email">mailto: [[item.value]]</template>
+    <template for="string">"[[item.value]]"</template>
+    <template for="encrypted">****</template>
+    <template>[[item.value]]</template>
+</dynamic-repeat>
