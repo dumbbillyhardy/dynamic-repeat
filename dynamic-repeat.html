@@ -13,6 +13,10 @@
                 items: {
                     type: Array,
                     observer: "_generate"
+                },
+                as: {
+                    type: String,
+                    value: "item"
                 }
             },
 
@@ -25,14 +29,14 @@
 
             _generate() {
               if(this.items != null) {
-                this._renderers = this.items.map(c => {
-                    const currTemplate = this._getTemplate(c);
+                this._renderers = this.items.map(item => {
+                    const currTemplate = this._getTemplate(item);
                     if(this._lastTemplate !== currTemplate) {
                         this._lastTemplate = currTemplate;
                         this.templatize(currTemplate);
                     }
                     let renderer = this.stamp(null);
-                    renderer.definition = c;
+                    renderer[this.as] = item;
                     Polymer.dom(Polymer.dom(this).parentNode).insertBefore(renderer.root, this);
                     return renderer;
                 });

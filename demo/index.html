@@ -22,7 +22,7 @@
         <template is="dom-bind" id="domBindPoly1">
             <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
             <vaadin-grid aria-label="Dynamic Columns Example" id="grid" data-provider="[[dataProvider]]" size="200">
-                <dynamic-repeat items="[[columns]]">
+                <dynamic-repeat items="[[columns]]" as="definition">
                     <template for="string">
                         <vaadin-grid-column>
                             <template class="header"><b>[[definition.prop]]</b></template>
