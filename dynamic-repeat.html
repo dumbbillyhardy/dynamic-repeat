@@ -16,6 +16,10 @@
                     type: String,
                     value: "item"
                 },
+                indexAs: {
+                    type: String,
+                    value: "index"
+                },
                 attribute: {
                     type: String,
                     value: "for"
@@ -29,25 +33,23 @@
             },
 
             observers: [
-                "_forwardProps(as)",
                 "_generate(items.*)"
             ],
-
-            _forwardProps(as) {
-                if (this.templatizerMap) {
-                    this.templatizerMap.values()
-                        .forEach(node => {
-                            node.as = as;
-                        });
-                }
-            },
 
             ready() {
                 this.templatizerMap = new Map();
                 this._observer = Polymer.dom(this.$.slot).observeNodes(({addedNodes, removedNodes}) => {
                     removedNodes
-                        .forEach(node => {
-                            const foor = this._getIdentifier(node, this.attribute);
+                        .map(node => {
+                            return {
+                                foor: this._getIdentifier(node, this.attribute),
+                                node
+                            };
+                        })
+                        .filter(({foor, node}) => {
+                            return this.templatizerMap.get(foor) === node;
+                        })
+                        .forEach(({node}) => {
                             this.templatizerMap.delete(foor);
                         });
                     addedNodes
@@ -73,10 +75,10 @@
                 return el;
             },
 
-            _getTemplatizer(column) {
+            _getTemplatizer(item) {
                 let templatizer = this.properties.reduce((acc, val) => {
                     if(!acc) {
-                        acc = this.templatizerMap.get(column[val]);
+                        acc = this.templatizerMap.get(item[val]);
                     }
                     return acc;
                 }, null);
@@ -84,24 +86,34 @@
                 return templatizer;
             },
 
-            _getInstance(column) {
-                const templatizer = this._getTemplatizer(column);
-                return templatizer.generate(column);
+            _getInstance(item, index) {
+                const templatizer = this._getTemplatizer(item);
+                const inst = templatizer.generate(item);
+                inst[this.as] = item;
+                inst[this.indexAs] = index;
+                return inst;
             },
 
             _generate() {
-                if(this.items != null) {
-                    (this._instances || []).forEach(inst => {
+                if(!this.items) {
+                    return;
+                }
+                (this._instances || [])
+                    .forEach(inst => {
                         for(let i=0; i<inst.children.length; i++) {
                             inst.root.appendChild(inst.children[i]);
                         }
                     });
-                    this._instances = this.items.map(this._getInstance.bind(this))
-                        .map(inst => {
-                            Polymer.dom(Polymer.dom(this).parentNode).insertBefore(inst.root, this);
-                            return inst;
-                        });
-                }
+                this._instances = this.items
+                    .map(this._getInstance.bind(this))
+                    .map(inst => {
+                        Polymer.dom(Polymer.dom(this).parentNode).insertBefore(inst.root, this);
+                        return inst;
+                    });
+                this.dispatchEvent(new CustomEvent('dom-change', {
+                    bubbles: true,
+                    composed: true
+                }));
             },
         });
     </script>

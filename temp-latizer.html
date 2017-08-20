@@ -6,21 +6,12 @@
 
             behaviors: [Polymer.Templatizer],
 
-            properties: {
-                as: {
-                    type: String,
-                    value: "item"
-                }
-            },
-
             set template(template) {
                 this.templatize(template);
             },
 
-            generate(item) {
-                let renderer = this.stamp(null);
-                renderer[this.as] = item;
-                return renderer;
+            generate(item, index) {
+                return this.stamp(null);
             },
         });
     </script>
