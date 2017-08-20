@@ -17,12 +17,22 @@
                 as: {
                     type: String,
                     value: "item"
+                },
+                properties: {
+                    type: Array,
+                    value: function() {
+                        return ["prop", "type"];
+                    }
                 }
             },
 
             _getTemplate(column) {
-                let template = this.queryEffectiveChildren("template[for="+column.prop+"]");
-                template = template || this.queryEffectiveChildren("template[for="+column.type+"]");
+                let template = this.properties.reduce((acc, val) => {
+                    if(!acc) {
+                        acc = this.queryEffectiveChildren("template[for="+column[val]+"]");
+                    }
+                    return acc;
+                }, null);
                 template = template || this.queryEffectiveChildren("template:not([for])");
                 return template;
             },
