@@ -45,14 +45,17 @@
             ready() {
                 this.templatizerMap = new Map();
                 this._observer = Polymer.dom(this.$.slot).observeNodes(({addedNodes, removedNodes}) => {
-                    removedNodes.forEach(node => {
-                        const foor = this._getIdentifier(node, this.attribute);
-                        this.templatizerMap.delete(foor);
-                    });
-                    addedNodes.filter(node => node.nodeName === "TEMPLATE").forEach(node => {
-                        const foor = this._getIdentifier(node, this.attribute);
-                        this.templatizerMap.set(foor, this._generateTemplatizer(node));
-                    });
+                    removedNodes
+                        .forEach(node => {
+                            const foor = this._getIdentifier(node, this.attribute);
+                            this.templatizerMap.delete(foor);
+                        });
+                    addedNodes
+                        .filter(node => node.nodeName === "TEMPLATE")
+                        .forEach(node => {
+                            const foor = this._getIdentifier(node, this.attribute);
+                            this.templatizerMap.set(foor, this._generateTemplatizer(node));
+                        });
                     if(this.items) {
                         this._generate();
                     }
