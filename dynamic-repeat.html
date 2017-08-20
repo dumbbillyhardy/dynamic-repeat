@@ -8,12 +8,9 @@
         Polymer({
             is: 'dynamic-repeat',
 
-            behaviors: [Polymer.Templatizer],
-
             properties: {
                 items: {
                     type: Array,
-                    observer: "_generate"
                 },
                 as: {
                     type: String,
@@ -31,7 +28,10 @@
                 }
             },
 
-            observers: ["_forwardProps(as)"],
+            observers: [
+                "_forwardProps(as)",
+                "_generate(items.*)"
+            ],
 
             _forwardProps(as) {
                 if (this.templatizerMap) {
