@@ -1,7 +1,8 @@
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="temp-latizer.html">
 <dom-module id="dynamic-repeat">
     <template>
-        <slot></slot>
+        <slot id="slot"></slot>
     </template>
     <script>
         Polymer({
@@ -18,6 +19,10 @@
                     type: String,
                     value: "item"
                 },
+                attribute: {
+                    type: String,
+                    value: "for"
+                },
                 properties: {
                     type: Array,
                     value: function() {
@@ -26,31 +31,74 @@
                 }
             },
 
-            _getTemplate(column) {
-                let template = this.properties.reduce((acc, val) => {
+            observers: ["_forwardProps(as)"],
+
+            _forwardProps(as) {
+                if (this.templatizerMap) {
+                    this.templatizerMap.values()
+                        .forEach(node => {
+                            node.as = as;
+                        });
+                }
+            },
+
+            ready() {
+                this.templatizerMap = new Map();
+                this._observer = Polymer.dom(this.$.slot).observeNodes(({addedNodes, removedNodes}) => {
+                    removedNodes.forEach(node => {
+                        const foor = this._getIdentifier(node, this.attribute);
+                        this.templatizerMap.delete(foor);
+                    });
+                    addedNodes.filter(node => node.nodeName === "TEMPLATE").forEach(node => {
+                        const foor = this._getIdentifier(node, this.attribute);
+                        this.templatizerMap.set(foor, this._generateTemplatizer(node));
+                    });
+                    if(this.items) {
+                        this._generate();
+                    }
+                });
+            },
+
+            _getIdentifier(node, attr) {
+                return node[attr] || node.getAttribute(attr) || "";
+            },
+
+            _generateTemplatizer(template) {
+                const el = document.createElement("temp-latizer");
+                el.template = template;
+                el.as = this.as;
+                return el;
+            },
+
+            _getTemplatizer(column) {
+                let templatizer = this.properties.reduce((acc, val) => {
                     if(!acc) {
-                        acc = this.queryEffectiveChildren("template[for="+column[val]+"]");
+                        acc = this.templatizerMap.get(column[val]);
                     }
                     return acc;
                 }, null);
-                template = template || this.queryEffectiveChildren("template:not([for])");
-                return template;
+                templatizer = templatizer || this.templatizerMap.get("");
+                return templatizer;
+            },
+
+            _getInstance(column) {
+                const templatizer = this._getTemplatizer(column);
+                return templatizer.generate(column);
             },
 
             _generate() {
-              if(this.items != null) {
-                this._renderers = this.items.map(item => {
-                    const currTemplate = this._getTemplate(item);
-                    if(this._lastTemplate !== currTemplate) {
-                        this._lastTemplate = currTemplate;
-                        this.templatize(currTemplate);
-                    }
-                    let renderer = this.stamp(null);
-                    renderer[this.as] = item;
-                    Polymer.dom(Polymer.dom(this).parentNode).insertBefore(renderer.root, this);
-                    return renderer;
-                });
-              }
+                if(this.items != null) {
+                    (this._instances || []).forEach(inst => {
+                        for(let i=0; i<inst.children.length; i++) {
+                            inst.root.appendChild(inst.children[i]);
+                        }
+                    });
+                    this._instances = this.items.map(this._getInstance.bind(this))
+                        .map(inst => {
+                            Polymer.dom(Polymer.dom(this).parentNode).insertBefore(inst.root, this);
+                            return inst;
+                        });
+                }
             },
         });
     </script>

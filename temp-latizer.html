@@ -1,0 +1,27 @@
+<link rel="import" href="../polymer/polymer.html">
+<dom-module id="temp-latizer">
+    <script>
+        Polymer({
+            is: 'temp-latizer',
+
+            behaviors: [Polymer.Templatizer],
+
+            properties: {
+                as: {
+                    type: String,
+                    value: "item"
+                }
+            },
+
+            set template(template) {
+                this.templatize(template);
+            },
+
+            generate(item) {
+                let renderer = this.stamp(null);
+                renderer[this.as] = item;
+                return renderer;
+            },
+        });
+    </script>
+</dom-module>
