@@ -40,6 +40,7 @@
                 this.templatizerMap = new Map();
                 this._observer = Polymer.dom(this.$.slot).observeNodes(({addedNodes, removedNodes}) => {
                     removedNodes
+                        .filter(node => node.nodeName === "TEMPLATE")
                         .map(node => {
                             return {
                                 foor: this._getIdentifier(node, this.attribute),
