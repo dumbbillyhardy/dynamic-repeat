@@ -101,12 +101,14 @@
                 }
                 (this._instances || [])
                     .forEach(inst => {
-                        for(let i=0; i<inst.children.length; i++) {
-                            inst.root.appendChild(inst.children[i]);
+                        const children = inst._children || inst.children;
+                        for(let i=0; i<children.length; i++) {
+                            Polymer.dom(inst.root).appendChild(children[i]);
                         }
                     });
                 this._instances = this.items
                     .map(this._getInstance.bind(this))
+                    .filter(inst => !!inst)
                     .map(inst => {
                         Polymer.dom(Polymer.dom(this).parentNode).insertBefore(inst.root, this);
                         return inst;
