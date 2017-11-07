@@ -12,6 +12,7 @@ You can use **dynamic-repeat** exactly the same way you'd use **dom-repeat**,
 ```
 <custom-element-demo>
 <template>
+<script src="../webcomponentsjs/webcomponents-lite.js"></script>
 <link rel="import" href="dynamic-repeat.html">
 <next-code-block></next-code-block>
 </template>
